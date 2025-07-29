@@ -6,7 +6,6 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
-using namespace std;
 
 #ifndef ASSETS_PATH
 #error "ASSETS_PATH not defined"
@@ -14,29 +13,29 @@ using namespace std;
 
 class Grid : public SceneObject {
 public:
-    Grid(View& _v) : m_curView(_v) {
-        m_font.loadFromFile(string(ASSETS_PATH)+"/CascadiaCode.ttf");
+    Grid(sf::View& _v) : m_curView(_v) {
+        m_font.loadFromFile(std::string(ASSETS_PATH)+"/CascadiaCode.ttf");
         m_text.setFont(m_font);
         m_text.setString("asd");
-        m_text.setFillColor(Color::Black);
+        m_text.setFillColor(sf::Color::Black);
         m_text.setCharacterSize(30);
     }
 private:
 
     float findBestStep(float width) const;
 
-    virtual void draw(RenderTarget& target, RenderStates states) const;
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
     
 
-    void drawPosNum(RenderTarget& target, RenderStates states, Vector2<double> pos) const;
+    void drawPosNum(sf::RenderTarget& target, sf::RenderStates states, sf::Vector2<double> pos) const;
 
-    View& m_curView;
-    Font m_font;
-    mutable Text m_text;
+    sf::View& m_curView;
+    sf::Font m_font;
+    mutable sf::Text m_text;
     const float m_txtSize = 15/30.f;
-    const Color MainAxisColor = Color(0, 0, 0);
-    const Color GridLineColor = Color(140, 140, 140);
-    const Color SubGridLineColor = Color(190, 190, 190);
+    const sf::Color MainAxisColor = sf::Color(0, 0, 0);
+    const sf::Color GridLineColor = sf::Color(140, 140, 140);
+    const sf::Color SubGridLineColor = sf::Color(190, 190, 190);
 
 };
 

@@ -5,20 +5,20 @@
 
 #include <vector>
 #include <iostream>
-using namespace std;
 
 #include <SFML/Graphics.hpp>
-using namespace sf;
 
 // View Controller class
 class ViewController {
 public:
-    ViewController(View& _view);
-    void Update(RenderWindow& window, vector<Event> events);
+    ViewController(sf::View& _view);
+    void Update(sf::RenderWindow& window, std::vector<sf::Event> events);
 private:
-    View& m_view;
+    sf::View& m_view;
 
-    Vector2i lastPos;
+    sf::Vector2i lastPos;
+
+    const double zoomFactor = 1.1;
 };
 
 #endif // VIEWCONTROLLER_CLASS_H

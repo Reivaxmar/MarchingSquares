@@ -1,24 +1,24 @@
 #include "ViewController.h"
 
-ViewController::ViewController(View& _view) : m_view(_view), lastPos(Mouse::getPosition()) {
+ViewController::ViewController(sf::View& _view) : m_view(_view), lastPos(sf::Mouse::getPosition()) {
 
 }
 
-void ViewController::Update(RenderWindow& window, vector<Event> events) {
+void ViewController::Update(sf::RenderWindow& window, std::vector<sf::Event> events) {
     // Initialize a tracker for the mouse wheel
     int wheelFactor = 0;
     // And iterate through the events to check if there's a mouse wheel movement
-    for(Event ev : events)
-        if(ev.type == Event::MouseWheelScrolled)
-            if(ev.mouseWheelScroll.wheel == Mouse::VerticalWheel)
+    for(sf::Event ev : events)
+        if(ev.type == sf::Event::MouseWheelScrolled)
+            if(ev.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel)
                 wheelFactor = -ev.mouseWheelScroll.delta;
 
     // If it has moved
     if(wheelFactor != 0) {
         if(wheelFactor > 0) {   // Zoom smaller
-            zoomViewAt(m_view, Mouse::getPosition(window), window, 1.25);
+            zoomViewAt(m_view, sf::Mouse::getPosition(window), window, zoomFactor);
         } else {                // Zoom bigger
-            zoomViewAt(m_view, Mouse::getPosition(window), window, 0.8);
+            zoomViewAt(m_view, sf::Mouse::getPosition(window), window, 1.0 / zoomFactor);
         }
     }
     
@@ -38,14 +38,17 @@ void ViewController::Update(RenderWindow& window, vector<Event> events) {
     // }
 
     // Draw around the scene when the mouse is pressed
-    if(Mouse::isButtonPressed(Mouse::Left)) {
-        Vector2i curPos = Mouse::getPosition(window);
+    sf::Vector2i curPos = sf::Mouse::getPosition(window);
+    if(sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
         // Check if the mouse is on the window
         if(curPos.x >= 0 && curPos.x < static_cast<int>(window.getSize().x) &&
-           curPos.y >= 0 && curPos.y < static_cast<int>(window.getSize().y))
-            m_view.move(Vector2f(lastPos-curPos)*getZoom(m_view, window));
+           curPos.y >= 0 && curPos.y < static_cast<int>(window.getSize().y) && lastPos != sf::Vector2i(-1, -1))
+            m_view.move(sf::Vector2f(lastPos-curPos)*getZoom(m_view, window));
     }
 
     // Update the last mouse position
-    lastPos = Mouse::getPosition(window);
+    if(curPos.x >= 0 && curPos.x < static_cast<int>(window.getSize().x) &&
+       curPos.y >= 0 && curPos.y < static_cast<int>(window.getSize().y))
+        lastPos = curPos;
+    else lastPos = sf::Vector2i(-1, -1);
 }

@@ -5,17 +5,17 @@
 
 #include <vector>
 #include <memory>
-using namespace std;
 
 // Scene class
 class Scene {
 public:
     Scene();
-    void draw(RenderWindow& window);
-    void addObject(shared_ptr<SceneObject> obj);
-    vector<shared_ptr<SceneObject>>& getObjects();
+    void draw(sf::RenderWindow& window);
+    void update(const sf::RenderWindow& window, float deltaTime);
+    void addObject(std::shared_ptr<SceneObject> obj);
+    std::vector<std::shared_ptr<SceneObject>>& getObjects();
 private:
-    vector<shared_ptr<SceneObject>> objs;
+    std::vector<std::shared_ptr<SceneObject>> objs;
 };
 
 #endif // SCENE_CLASS_H

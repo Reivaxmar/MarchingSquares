@@ -2,17 +2,16 @@
 #define SCENEOBJECT_CLASS_H
 
 #include <SFML/Graphics.hpp>
-using namespace sf;
 
 // Base class for Scene objects
-class SceneObject : public Drawable, public Transformable {
+class SceneObject : public sf::Drawable, public sf::Transformable {
 public:
-    SceneObject() {}
+    SceneObject() = default;
+    virtual void update(const sf::RenderWindow& window, const float& deltaTime) {}
+
 private:
-    virtual void draw(RenderTarget& target, RenderStates states) const {
-        // Doesn't do anything
-        return;
-    }
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override = 0;
+
 };
 
 #endif // SCENEOBJECT_CLASS_H

@@ -2,12 +2,10 @@
 #define UTILS_H
 
 #include <SFML/Graphics.hpp>
-using namespace sf;
 
 #include <iostream>
 #include <sstream>
 #include <iomanip>
-using namespace std;
 
 template <typename U>
 // A comparator for hashing ordered Vector2
@@ -23,14 +21,17 @@ struct Vector2Comparator {
 };
 
 float lerp(float a, float b, float t);
-Vector2f lerp(const Vector2f& a, const Vector2f& b, float t);
+sf::Vector2f lerp(const sf::Vector2f& a, const sf::Vector2f& b, float t);
 
-float getZoom(View view, RenderTarget& target);
+float getZoom(const sf::View& view, sf::RenderTarget& target);
 
-void updateWindowSize(RenderTarget& target, View& view, Vector2f newSize);
+void updateWindowSize(sf::RenderTarget& target, sf::View& view, sf::Vector2f newSize);
 
 std::string floatToString(double value);
 
-void zoomViewAt(View& view, sf::Vector2i pixel, sf::RenderWindow& window, float zoom);
+void zoomViewAt(sf::View& view, sf::Vector2i pixel, sf::RenderWindow& window, float zoom);
+
+template<typename T>
+inline T distanceSquared(const sf::Vector2<T>& a, const sf::Vector2<T>& b);
 
 #endif // UTILS_H

@@ -11,7 +11,7 @@ FunctionHandler::FunctionHandler()
 }
 
 // Constructor that gets a function and an optional equal
-FunctionHandler::FunctionHandler(function<double(double, double)> _func, double _equalTo)
+FunctionHandler::FunctionHandler(std::function<double(double, double)> _func, double _equalTo)
     : m_func(_func)
     , m_equalTo(_equalTo)
 {
@@ -19,7 +19,7 @@ FunctionHandler::FunctionHandler(function<double(double, double)> _func, double 
 }
 
 // Set the function
-void FunctionHandler::setFunction(function<double(double, double)> _func) {
+void FunctionHandler::setFunction(std::function<double(double, double)> _func) {
     m_func = _func;
 }
 
@@ -29,7 +29,7 @@ void FunctionHandler::setEqual(double _equalTo) {
 }
 
 // Get the function
-function<double(double, double)>& FunctionHandler::getFunction() {
+std::function<double(double, double)>& FunctionHandler::getFunction() {
     return m_func;
 }
 
@@ -38,7 +38,7 @@ double FunctionHandler::getEqual() {
     return m_equalTo;
 }
 // Return the evaluation at position pos
-double FunctionHandler::evalAt(Vector2f pos) {
+double FunctionHandler::evalAt(sf::Vector2f pos) {
     return m_func(pos.x, pos.y);
 }
 // Return the evaluation at position (x, y)

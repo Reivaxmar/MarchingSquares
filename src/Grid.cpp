@@ -24,14 +24,14 @@ float Grid::findBestStep(float width) const {
 }
 
 
-void Grid::draw(RenderTarget& target, RenderStates states) const {
+void Grid::draw(sf::RenderTarget& target, sf::RenderStates states) const {
     
     target.draw(m_text);
     
     // Get the viewport center
-    Vector2f screenMid(m_curView.getCenter());
+    sf::Vector2f screenMid(m_curView.getCenter());
     float scale = m_curView.getSize().x/target.getSize().x;
-    Vector2f screenSize(target.getSize().x*scale, target.getSize().y*scale);
+    sf::Vector2f screenSize(target.getSize().x*scale, target.getSize().y*scale);
     
     
     // Calculate the begginning and the end of the horizontal and vertical lines
@@ -55,14 +55,14 @@ void Grid::draw(RenderTarget& target, RenderStates states) const {
     
     
     // Vertical lines
-    vector<Vertex> line = 
+    std::vector<sf::Vertex> line = 
     {
-        Vertex(Vector2f(0, screenMid.y - (screenSize.y / 2)), GridLineColor),
-        Vertex(Vector2f(0, screenMid.y + (screenSize.y / 2)), GridLineColor),
+        sf::Vertex(sf::Vector2f(0, screenMid.y - (screenSize.y / 2)), GridLineColor),
+        sf::Vertex(sf::Vector2f(0, screenMid.y + (screenSize.y / 2)), GridLineColor),
     };
     
     // Draw the (0, 0)
-    drawPosNum(target, states, Vector2<double>(0, 0));
+    drawPosNum(target, states, sf::Vector2<double>(0, 0));
     
     
     // Iterate over all vertical lines and draw them
@@ -74,25 +74,25 @@ void Grid::draw(RenderTarget& target, RenderStates states) const {
         for(int j = 1; j < 5; j++) {
             line[0].position.x = i + (step/5.f) * j;
             line[1].position.x = i + (step/5.f) * j;
-            target.draw(&line[0], 2, Lines, states);
+            target.draw(&line[0], 2, sf::Lines, states);
         }
         // Return the original color
         line[0].color = GridLineColor;
         line[1].color = GridLineColor;
         
-        if(abs(i) <= max(0.00001f, step/100.f)) continue;
+        if(abs(i) <= std::max(0.00001f, step/100.f)) continue;
         
         line[0].position.x = i;
         line[1].position.x = i;
-        target.draw(&line[0], 2, Lines, states);
-        drawPosNum(target, states, Vector2<double>(i, 0));
+        target.draw(&line[0], 2, sf::Lines, states);
+        drawPosNum(target, states, sf::Vector2<double>(i, 0));
     }
     
     
     // Horizontal lines lines
     line = {
-        Vertex(Vector2f(screenMid.x - (screenSize.x / 2), 0), GridLineColor),
-        Vertex(Vector2f(screenMid.x + (screenSize.x / 2), 0), GridLineColor),
+        sf::Vertex(sf::Vector2f(screenMid.x - (screenSize.x / 2), 0), GridLineColor),
+        sf::Vertex(sf::Vector2f(screenMid.x + (screenSize.x / 2), 0), GridLineColor),
     };
     
     
@@ -105,55 +105,55 @@ void Grid::draw(RenderTarget& target, RenderStates states) const {
         for(int j = 1; j < 5; j++) {
             line[0].position.y = i + (step/5.f) * j;
             line[1].position.y = i + (step/5.f) * j;
-            target.draw(&line[0], 2, Lines, states);
+            target.draw(&line[0], 2, sf::Lines, states);
         }
         // Return the original color
         line[0].color = GridLineColor;
         line[1].color = GridLineColor;
         
-        if(abs(i) <= max(0.00001f, step/100.f)) continue;
+        if(abs(i) <= std::max(0.00001f, step/100.f)) continue;
         line[0].position.y = i;
         line[1].position.y = i;
-        target.draw(&line[0], 2, Lines, states);
+        target.draw(&line[0], 2, sf::Lines, states);
         
-        drawPosNum(target, states, Vector2<double>(0, i));
+        drawPosNum(target, states, sf::Vector2<double>(0, i));
     }
     
     
     // X-axis line
-    Vertex xline[] = 
+    sf::Vertex xline[] = 
     {
-        Vertex(Vector2f(screenMid.x - (screenSize.x / 2), 0), MainAxisColor),
-        Vertex(Vector2f(screenMid.x + (screenSize.x / 2), 0), MainAxisColor),
+        sf::Vertex(sf::Vector2f(screenMid.x - (screenSize.x / 2), 0), MainAxisColor),
+        sf::Vertex(sf::Vector2f(screenMid.x + (screenSize.x / 2), 0), MainAxisColor),
     };
-    target.draw(xline, 2, Lines, states);
+    target.draw(xline, 2, sf::Lines, states);
     
     // Y-axis line
-    Vertex yline[] = 
+    sf::Vertex yline[] = 
     {
-        Vertex(Vector2f(0, screenMid.y - (screenSize.y / 2)), MainAxisColor),
-        Vertex(Vector2f(0, screenMid.y + (screenSize.y / 2)), MainAxisColor),
+        sf::Vertex(sf::Vector2f(0, screenMid.y - (screenSize.y / 2)), MainAxisColor),
+        sf::Vertex(sf::Vector2f(0, screenMid.y + (screenSize.y / 2)), MainAxisColor),
     };
-    target.draw(yline, 2, Lines, states);
+    target.draw(yline, 2, sf::Lines, states);
     
 }
 
-void Grid::drawPosNum(RenderTarget& target, RenderStates states, Vector2<double> pos) const {
+void Grid::drawPosNum(sf::RenderTarget& target, sf::RenderStates states, sf::Vector2<double> pos) const {
     // Get view scale
     float scale = getZoom(target.getView(), target) * m_txtSize;
     // And apply transformations to the text
     m_text.setScale(scale, scale);
-    m_text.setPosition(Vector2f(pos));
+    m_text.setPosition(sf::Vector2f(pos));
     
-    IntRect viewport = target.getViewport(target.getView());
+    sf::IntRect viewport = target.getViewport(target.getView());
     // cout << viewport.left << ", " << viewport.top << endl;
     // cout << viewport.width << ", " << viewport.height << endl;
-    if(!viewport.contains(target.mapCoordsToPixel(Vector2f(pos))) && pos.x != pos.y) {
+    if(!viewport.contains(target.mapCoordsToPixel(sf::Vector2f(pos))) && pos.x != pos.y) {
         // cout << "Doesn't contain: " << pos.x << ", " << pos.y << endl;
         if(pos.x == 0)
-            m_text.setPosition(Vector2f(clamp(0, viewport.left, viewport.left + viewport.width), pos.y));
+            m_text.setPosition(sf::Vector2f(std::clamp(0, viewport.left, viewport.left + viewport.width), pos.y));
         else
-            m_text.setPosition(Vector2f(pos.x, clamp(0, viewport.top, viewport.top + viewport.height)));
+            m_text.setPosition(sf::Vector2f(pos.x, std::clamp(0, viewport.top, viewport.top + viewport.height)));
     }
     
     
